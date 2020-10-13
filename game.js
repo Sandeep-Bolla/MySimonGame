@@ -3,15 +3,17 @@ var gamePattern = [];
 var userClickedPattern = [];
 var level = 0, currentLevel = 0;
 var start = true; //only if start=true next Sequence should work 
+var popUp = true;
 
 $(document).ready(function(){
-    setTimeout(() => {
+    //setTimeout(() => {
         $("#popUpMain").css("display","block");
-    },500);
+    //},500);
 });
 
 $("#submitId").click(function(){
     $("#popUpMain").css("display","none");
+    popUp = false;
 });
 
 function playAudio(input) { // To play Audio
@@ -34,7 +36,6 @@ function nextSequence() { //To flash the Next One
 };
 
 function clickAnimation(input) { //User Click Animation
-
     $(input).addClass("pressed");
     setTimeout(() => {
         $(input).removeClass("pressed");
@@ -72,21 +73,23 @@ function checkAnswer() {
 }
 
 $(".btn").click(function () { //When a user clicks
+    if(!start && !popUp) {
     userClickedPattern.push($(this).attr("id"));
     playAudio($(this).attr("id"));
     clickAnimation(this);
     currentLevel++;
     checkAnswer();
+    }
 });
 
 $(document).keypress(function (event) { //When a user presses the keyboard
-    if (start) {
+    if (start && !popUp) {
         if($("body").hasClass("game-over"))
             $("body").removeClass("game-over");
         nextSequence();
         start = false;
     }
-    else {
+    else if(!start && !popUp){
         if (event.key == 1 || event.key == 2 || event.key == 3 || event.key == 4) {
             var pressedColor = buttonColors[event.key - 1];
             userClickedPattern.push(pressedColor);
