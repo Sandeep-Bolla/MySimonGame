@@ -4,7 +4,15 @@ var userClickedPattern = [];
 var level = 0, currentLevel = 0;
 var start = true; //only if start=true next Sequence should work 
 
+$(document).ready(function(){
+    setTimeout(() => {
+        $("#popUpMain").css("display","block");
+    },500);
+});
 
+$("#submitId").click(function(){
+    $("#popUpMain").css("display","none");
+});
 
 function playAudio(input) { // To play Audio
     var aud = new Audio("sounds/" + input + ".mp3");
@@ -46,11 +54,11 @@ function checkAnswer() {
     if (userClickedPattern[currentLevel - 1] != gamePattern[currentLevel - 1]) { //wrong answer
         $("body").addClass("game-over");
         playAudio("wrong");
-        setTimeout(() => {
-            $("body").removeClass("game-over");
-            $("h1").text("Game Over, Press Any Key to Restart");
+        //setTimeout(() => {
+            //$("body").removeClass("game-over");
+            $("h1").text("Game Over, Press Any Key to Restart").css("font-size","2rem");
             startOver();
-        }, 200);
+        //}, 200);
     }
     else {
         if (currentLevel === level) {
@@ -73,6 +81,8 @@ $(".btn").click(function () { //When a user clicks
 
 $(document).keypress(function (event) { //When a user presses the keyboard
     if (start) {
+        if($("body").hasClass("game-over"))
+            $("body").removeClass("game-over");
         nextSequence();
         start = false;
     }
